@@ -1,83 +1,108 @@
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import {
-  getServerSession,
-  type DefaultSession,
-  type NextAuthOptions,
-} from "next-auth";
-import { type Adapter } from "next-auth/adapters";
-import DiscordProvider from "next-auth/providers/discord";
-
+import "server-only";
+import { type JWTPayload, SignJWT, jwtVerify } from "jose";
+import { cookies } from "next/headers";
 import { env } from "@/env";
-import { db } from "@/server/db";
-import {
-  accounts,
-  sessions,
-  users,
-  verificationTokens,
-} from "@/server/db/schema";
+import { cache } from "react";
+import { NextResponse, type NextRequest } from "next/server";
 
-/**
- * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
- * object and keep type safety.
- *
- * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
- */
-declare module "next-auth" {
-  interface Session extends DefaultSession {
-    user: {
-      id: string;
-      // ...other properties
-      // role: UserRole;
-    } & DefaultSession["user"];
-  }
+const key = new TextEncoder().encode(env.AUTH_SECRET);
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+export async function encrypt(payload: JWTPayload) {
+  return new SignJWT(payload)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("7day")
+    .sign(key);
 }
 
-/**
- * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
- *
- * @see https://next-auth.js.org/configuration/options
- */
-export const authOptions: NextAuthOptions = {
-  callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
-  },
-  adapter: DrizzleAdapter(db, {
-    usersTable: users,
-    accountsTable: accounts,
-    sessionsTable: sessions,
-    verificationTokensTable: verificationTokens,
-  }) as Adapter,
-  providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
-    }),
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
-  ],
-};
+export async function decrypt(session: string | undefined = "") {
+  try {
+    const { payload } = await jwtVerify(session, key, {
+      algorithms: ["HS256"],
+    });
+    return payload as JWTPayload & {
+      userId: string;
+      role: string;
+      division: string;
+      uname: string;
+      name?: string;
+    };
+  } catch (err) {
+    console.log("Error decrypting session");
+    return null;
+  }
+}
 
-/**
- * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
- *
- * @see https://next-auth.js.org/configuration/nextjs
- */
-export const getServerAuthSession = () => getServerSession(authOptions);
+export async function createSession(
+  id: string,
+  role: string,
+  division: string,
+  uname: string,
+  name?: string
+) {
+  const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  const session = await encrypt({
+    userId: id,
+    role: role,
+    division: division,
+    uname: uname,
+    name: name,
+    expires: expires,
+  });
+
+  cookies().set("session", session, {
+    httpOnly: true,
+    secure: env.NODE_ENV === "production",
+    expires: expires,
+    sameSite: "lax",
+    path: "/",
+  });
+}
+
+export const verifySession = cache(async () => {
+  const cookie = cookies().get("session")?.value;
+
+  if (!cookie) {
+    return { isAuth: false};
+  }
+
+  const session = await decrypt(cookie);
+
+  if (!session?.userId) {
+    return { isAuth: false};
+  }
+
+  return {
+    isAuth: true,
+    userId: session.userId,
+  };
+});
+
+export async function updateSession(_request: NextRequest) {
+  const session = cookies().get("session")?.value;
+  const payload = await decrypt(session);
+
+  if (!session || !payload) {
+    return;
+  }
+
+  const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+  const res = NextResponse.next();
+  res.cookies.set({
+    name: "session",
+    value: await encrypt({ ...payload, expires: expires }),
+    httpOnly: true,
+    secure: env.NODE_ENV === "production",
+    expires: expires,
+    sameSite: "lax",
+  });
+
+  return res;
+}
+
+export async function deleteSession() {
+  cookies().set("session", "", {
+    expires: new Date(0),
+  });
+}

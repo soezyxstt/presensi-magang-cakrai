@@ -19,7 +19,7 @@ export default function KruSidebar({
 }) {
   const navItems = [
     { title: "Home", icon: <Home className='h-5 w-5' />, href: "/kru" },
-    { title: "Profile", icon: <UserRound className='h-5 w-5' />, href: "/kru/profile/2123" },
+    { title: "Profile", icon: <UserRound className='h-5 w-5' />, href: "/kru/profile/" },
     { title: "Logout", icon: <LogOut className='h-5 w-5' />, href: "/logout" },
   ];
   return (

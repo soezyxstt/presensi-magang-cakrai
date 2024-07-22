@@ -5,8 +5,7 @@ const config = {
     "project": true
   },
   "plugins": [
-    "@typescript-eslint",
-    "drizzle"
+    "@typescript-eslint"
   ],
   "extends": [
     "next/core-web-vitals",
@@ -16,6 +15,7 @@ const config = {
   "rules": {
     "@typescript-eslint/array-type": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/consistent-type-imports": [
       "warn",
       {
@@ -36,24 +36,6 @@ const config = {
         "checksVoidReturn": {
           "attributes": false
         }
-      }
-    ],
-    "drizzle/enforce-delete-with-where": [
-      "error",
-      {
-        "drizzleObjectName": [
-          "db",
-          "ctx.db"
-        ]
-      }
-    ],
-    "drizzle/enforce-update-with-where": [
-      "error",
-      {
-        "drizzleObjectName": [
-          "db",
-          "ctx.db"
-        ]
       }
     ]
   }

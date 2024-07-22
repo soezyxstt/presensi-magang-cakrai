@@ -26,12 +26,16 @@ import { Badge } from "@/components/ui/badge";
 import { MoreHorizontal } from "lucide-react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { type Dispatch, type SetStateAction } from "react";
+import { useAction } from 'next-safe-action/hooks';
+import { attendance } from '~/actions/attendance';
+import { toast } from 'sonner';
 
 export default function KruTable({
   data,
   page,
   setPage,
   lastpage,
+  author,
 }: {
   data: {
     name: string;
@@ -39,32 +43,57 @@ export default function KruTable({
     attendance: number | string;
     totalAttendance: number | string;
     updatedAt: string;
+    id: string;
   }[];
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
   lastpage: number;
-}) {
+  author: string;
+  }) {
+  const { executeAsync } = useAction(attendance, {
+    onSuccess: (data) => {
+      console.log(data);
+      toast.success(data.data?.message);
+    },
+    onError: (err) => {
+      console.log(err);
+      toast.error(err.error.serverError);
+    },
+  })
+
+  async function handleAttend(status: 'PRESENT' | 'ABSENT' | 'LATE', id: string) {
+    const res = await executeAsync({
+      userId: id,
+      authorId: author,
+      status,
+      date: new Date(),
+    });
+
+    console.log(res);
+  }
   return (
-    <Card x-chunk="dashboard-06-chunk-0" className='bg-muted/40'>
+    <Card x-chunk="dashboard-06-chunk-0" className="bg-muted/40">
       <CardHeader>
         <CardTitle>CAKRAI</CardTitle>
-        <CardDescription className='text-slate-800'>
+        <CardDescription className="text-slate-800">
           Manage your brow and sist and view their performance.
         </CardDescription>
       </CardHeader>
-      <CardContent className=''>
+      <CardContent className="">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className=" text-violet-600">Name</TableHead>
-              <TableHead className="hidden text-center md:table-cell text-violet-600">
+              <TableHead className="text-violet-600">Name</TableHead>
+              <TableHead className="hidden text-center text-violet-600 md:table-cell">
                 Division
               </TableHead>
-              <TableHead className="text-center text-violet-600">Attendace</TableHead>
-              <TableHead className="hidden text-center md:table-cell text-violet-600">
+              <TableHead className="text-center text-violet-600">
+                Attendace
+              </TableHead>
+              <TableHead className="hidden text-center text-violet-600 md:table-cell">
                 Total Attendance
               </TableHead>
-              <TableHead className="hidden text-center md:table-cell text-violet-600">
+              <TableHead className="hidden text-center text-violet-600 md:table-cell">
                 Updated At
               </TableHead>
               <TableHead>
@@ -116,9 +145,9 @@ export default function KruTable({
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem>Present</DropdownMenuItem>
-                        <DropdownMenuItem>Late</DropdownMenuItem>
-                        <DropdownMenuItem>Absent</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleAttend('PRESENT', cakrai.id)}>Present</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleAttend('LATE', cakrai.id)}>Late</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleAttend('PRESENT', cakrai.id)}>Absent</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>
@@ -129,7 +158,7 @@ export default function KruTable({
         </Table>
       </CardContent>
       <CardFooter className="flex justify-between">
-        <div className="text-muted-foreground text-xs">
+        <div className="text-xs text-muted-foreground">
           Showing{" "}
           <strong>
             {(page - 1) * 6 +
@@ -139,7 +168,7 @@ export default function KruTable({
           </strong>{" "}
           of <strong>{data.length}</strong> cakrais
         </div>
-        <div className="text-muted-foreground flex items-center gap-4 text-sm">
+        <div className="flex items-center gap-4 text-sm text-muted-foreground">
           {page === 1 || (
             <FiChevronLeft
               onClick={() => setPage((prev) => prev - 1)}

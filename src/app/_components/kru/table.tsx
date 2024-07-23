@@ -165,7 +165,7 @@ export default function KruTable({
                             Late
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => handleAttend("PRESENT", cakrai.id)}
+                            onClick={() => handleAttend("ABSENT", cakrai.id)}
                           >
                             Absent
                           </DropdownMenuItem>

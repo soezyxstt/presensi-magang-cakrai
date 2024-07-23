@@ -72,7 +72,7 @@ export default function Cakru({
     setChangeData({ oldPassword: "", password: "", confirmPassword: "" });
   }
   return (
-    <div className="relative min-h-dvh w-full space-y-6 px-6 py-6 md:px-12">
+    <div className="relative min-h-dvh w-full flex flex-col gap-6 px-6 md:py-6 py-4 md:px-12">
       <Link href="/sign-out" className='absolute top-6 right-6'>
         <LogOut className="w-4 h-4 md:w-6 md:h-6 text-violet-100" />
       </Link>

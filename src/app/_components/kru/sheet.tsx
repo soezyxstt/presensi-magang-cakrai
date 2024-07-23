@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
-import { PanelLeft, Home, UserRound, LogOut, Settings } from 'lucide-react';
+import { PanelLeft, Home, UserRound, LogOut } from 'lucide-react';
 import Link from 'next/link';
 
 export default function KruSheet() { 
@@ -9,10 +9,9 @@ export default function KruSheet() {
     {
       title: "Profile",
       icon: <UserRound className="h-5 w-5" />,
-      href: "/kru/profile/2123",
+      href: "/kru/profile",
     },
-    { title: "Setting", icon: <Settings className="h-5 w-5" />, href: "#" },
-    { title: "Logout", icon: <LogOut className="h-5 w-5" />, href: "/logout" },
+    { title: "Logout", icon: <LogOut className="h-5 w-5" />, href: "/sign-out" },
   ];
   return (
     <Sheet>

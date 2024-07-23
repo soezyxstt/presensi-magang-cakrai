@@ -36,7 +36,7 @@ export default function RootLayout({
           <TooltipProvider>{children}</TooltipProvider>
           <Link
             href="https://github.com/soezyxstt"
-            className="fixed z-10 right-4 top-[calc(100vh-2.5rem)] flex items-center gap-2 rounded-xl border border-white bg-black/20 px-3 py-1 text-xs text-white backdrop-blur-sm"
+            className="fixed z-10 right-4 top-[calc(100dvh-2.5rem)] flex items-center gap-2 rounded-xl border border-white bg-black/20 px-3 py-1 text-xs text-white backdrop-blur-sm"
           >
             Web by Adi <FiGithub />
           </Link>

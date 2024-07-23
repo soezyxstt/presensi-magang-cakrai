@@ -154,19 +154,19 @@ export default function Cakru({
                   {
                     activity: "present",
                     value: (present / total) * 100,
-                    label: `${present / total}%`,
+                    label: `${present / total * 100}%`,
                     fill: "var(--color-present)",
                   },
                   {
                     activity: "late",
                     value: (late / total) * 100,
-                    label: `${late / total}%`,
+                    label: `${late / total * 100}%`,
                     fill: "var(--color-late)",
                   },
                   {
                     activity: "absent",
                     value: (absent / total) * 100,
-                    label: `${absent / total}%`,
+                    label: `${absent / total * 100}%`,
                     fill: "var(--color-absent)",
                   },
                 ]}

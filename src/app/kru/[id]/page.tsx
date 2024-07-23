@@ -1,10 +1,10 @@
-import { db } from '~/server/db';
-import Kru from './client';
-import { verifySession } from '~/server/auth';
-import { redirect } from 'next/navigation';
+import { db } from "~/server/db";
+import Kru from "./client";
+import { verifySession } from "~/server/auth";
+import { redirect } from "next/navigation";
 
 async function getCAKRAI() {
-  'use server';
+  "use server";
 
   const cakrais = await db.user.findMany({
     where: {
@@ -15,17 +15,20 @@ async function getCAKRAI() {
     },
     orderBy: {
       name: "asc",
-    }
-  })
+    },
+  });
 
   return cakrais;
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await verifySession();
-  
   if (!session.isAuth) {
-    redirect('/')
+    redirect("/");
+  }
+
+  if (!(session.userId === params.id)) {
+    redirect("/kru/" + session.userId);
   }
 
   const cakrai = await getCAKRAI();
@@ -41,6 +44,5 @@ export default async function Page({ params }: { params: { id: string } }) {
     return cakrai.attendance.filter(({ status }) => status !== "ABSENT").length;
   });
   const maxAttend = cakraiAttend.reduce((a, b) => Math.max(a, b));
-  return <Kru params={params} cakrais={cakrais} maxAttend={maxAttend}>
-  </Kru>
+  return <Kru params={params} cakrais={cakrais} maxAttend={maxAttend}></Kru>;
 }

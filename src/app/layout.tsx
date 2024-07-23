@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body className="relative bg-gradient-to-br from-pink-400 via-violet-400 to-cyan-400">
         <div className="relative min-h-dvh w-full bg-muted/5">
-          <div className="pointer-events-none absolute inset-0 h-screen w-full max-w-[100vw] overflow-x-hidden">
+          <div className="pointer-events-none absolute inset-0 h-dvh max-h-dvh w-full max-w-[100vw] overflow-x-hidden">
             <SparklesCore
               id="tsparticlesfullpage"
               background="transparent"

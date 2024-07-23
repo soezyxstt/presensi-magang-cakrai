@@ -17,7 +17,7 @@ import { type BaseSyntheticEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useAction } from "next-safe-action/hooks";
-import { signIn } from "~/actions/signin";
+import { signIn } from "~/actions/user";
 import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({

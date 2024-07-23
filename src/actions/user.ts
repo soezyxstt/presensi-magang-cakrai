@@ -1,7 +1,7 @@
 "use server";
 
 import { actionClient } from "@/lib/action-client";
-import { createSession } from "@/server/auth";
+import { createSession, deleteSession } from "@/server/auth";
 import { compare } from 'bcrypt-ts';
 import { flattenValidationErrors } from "next-safe-action";
 import { z } from 'zod';
@@ -35,7 +35,7 @@ export const signIn = actionClient
 
       await createSession(user.id, user.role, user.division,user.uname, user.name!);
       return {
-        message: "User signed in successfully",
+        message: `Signed in as ${user.name}`,
         status: "success",
         role: user.role,
         id: user.id,
@@ -49,3 +49,20 @@ export const signIn = actionClient
       throw new Error("Failed to sign in");
     }
   });
+
+export async function signOut() {
+  try {
+    await deleteSession();
+    return {
+      message: "User signed out successfully",
+      status: "success",
+    };
+  } catch (err) {
+    if (err instanceof Error) {
+      console.log(err.message);
+      throw new Error(err.message);
+    }
+
+    throw new Error("Failed to sign out");
+  }
+}

@@ -20,7 +20,7 @@ export default function KruSidebar({
   const navItems = [
     { title: "Home", icon: <Home className='h-5 w-5' />, href: "/kru" },
     { title: "Profile", icon: <UserRound className='h-5 w-5' />, href: "/kru/profile/" },
-    { title: "Logout", icon: <LogOut className='h-5 w-5' />, href: "/logout" },
+    { title: "Logout", icon: <LogOut className='h-5 w-5' />, href: "/sign-out" },
   ];
   return (
     <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-white bg-opacity-30 sm:flex">

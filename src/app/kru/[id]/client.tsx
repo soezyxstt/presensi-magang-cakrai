@@ -30,7 +30,10 @@ export default function Kru({
       name: cakrai.name ?? cakrai.uname,
       division: cakrai.division,
       totalAttendance: cakrai.attendance.length,
-      attendance: (cakrai.attendance.length / 20) * 100,
+      attendance:
+        (cakrai.attendance.filter(({ status }) => status !== "ABSENT").length /
+          25) *
+        100,
       updatedAt: cakrai.updatedAt.toLocaleString(),
       id: cakrai.id,
     };

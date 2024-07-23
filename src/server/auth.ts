@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { env } from "@/env";
 import { cache } from "react";
 import { NextResponse, type NextRequest } from "next/server";
+import type { Role } from '@prisma/client';
 
 const key = new TextEncoder().encode(env.AUTH_SECRET);
 
@@ -22,7 +23,7 @@ export async function decrypt(session: string | undefined = "") {
     });
     return payload as JWTPayload & {
       userId: string;
-      role: string;
+      role: Role;
       division: string;
       uname: string;
       name?: string;
@@ -77,6 +78,11 @@ export const verifySession = cache(async () => {
     userId: session.userId,
   };
 });
+
+export async function getSession() {
+  const session = cookies().get("session")?.value;
+  return await decrypt(session);
+}
 
 export async function updateSession(_request: NextRequest) {
   const session = cookies().get("session")?.value;

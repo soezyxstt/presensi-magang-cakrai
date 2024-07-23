@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { useFormState } from 'react-dom';
 import { signOut } from '~/actions/user';
+import { TextGenerateEffect } from '~/components/aceternity/text-generate-effect';
 
 export default function SignOut() {
   const router = useRouter();
@@ -15,7 +16,9 @@ export default function SignOut() {
       router.push('/sign-in')
     }, 2000)
   })
-  return <div className='flex w-full h-dvh justify-center items-center'>
-    Signing out...
-  </div>
+  return (
+    <div className="flex h-dvh w-full items-center justify-center">
+      <TextGenerateEffect words="Signing out..." className="text-xl md:text-3xl" />
+    </div>
+  );
 }

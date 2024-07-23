@@ -45,6 +45,7 @@ export default function KruTable({
     updatedAt: string;
     id: string;
     isAttending: boolean;
+    desc?: "PRESENT" | "ABSENT" | "LATE";
   }[];
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
@@ -172,7 +173,9 @@ export default function KruTable({
                         </DropdownMenuContent>
                       </DropdownMenu>
                     ) : (
-                      <h4>Attending</h4>
+                      <h4 className="capitalize">
+                        {cakrai.desc?.toLowerCase()}
+                      </h4>
                     )}
                   </TableCell>
                 </TableRow>
@@ -193,19 +196,21 @@ export default function KruTable({
           of <strong>{data.length}</strong> cakrais
         </div>
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          {page === 1 || (
-            <FiChevronLeft
-              onClick={() => setPage((prev) => prev - 1)}
-              className="cursor-pointer"
-            />
-          )}
+          <button
+            className="cursor-pointer disabled:cursor-not-allowed disabled:select-none disabled:opacity-50"
+            onClick={() => setPage((prev) => prev - 1)}
+            disabled={page === 1}
+          >
+            <FiChevronLeft />
+          </button>
           <div className="text-xs">{page}</div>
-          {page === lastpage || (
-            <FiChevronRight
-              onClick={() => setPage((prev) => prev + 1)}
-              className="cursor-pointer"
-            />
-          )}
+          <button
+            className="cursor-pointer disabled:cursor-not-allowed disabled:select-none disabled:opacity-50"
+            onClick={() => setPage((prev) => prev + 1)}
+            disabled={page === lastpage}
+          >
+            <FiChevronRight />
+          </button>
         </div>
       </CardFooter>
     </Card>

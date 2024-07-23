@@ -1,5 +1,7 @@
 import { db } from '~/server/db';
 import Kru from './client';
+import { verifySession } from '~/server/auth';
+import { redirect } from 'next/navigation';
 
 async function getCAKRAI() {
   'use server';
@@ -10,6 +12,9 @@ async function getCAKRAI() {
     },
     include: {
       attendance: true,
+    },
+    orderBy: {
+      name: "asc",
     }
   })
 
@@ -17,7 +22,25 @@ async function getCAKRAI() {
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const cakrais = await getCAKRAI();
-  return <Kru params={params} cakrais={cakrais}>
+  const session = await verifySession();
+  
+  if (!session.isAuth) {
+    redirect('/')
+  }
+
+  const cakrai = await getCAKRAI();
+  const cakrais = cakrai.map((cakrai) => {
+    return {
+      ...cakrai,
+      updatedAt: new Date(
+        cakrai.updatedAt.setHours(cakrai.updatedAt.getHours() + 7),
+      ),
+    };
+  });
+  const cakraiAttend = cakrais.map((cakrai) => {
+    return cakrai.attendance.filter(({ status }) => status !== "ABSENT").length;
+  });
+  const maxAttend = cakraiAttend.reduce((a, b) => Math.max(a, b));
+  return <Kru params={params} cakrais={cakrais} maxAttend={maxAttend}>
   </Kru>
 }

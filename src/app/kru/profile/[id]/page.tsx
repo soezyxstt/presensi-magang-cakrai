@@ -74,22 +74,25 @@ export default function KruProfile({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="min-h-dvh sm:pt-4">
+    <div className="relative min-h-dvh sm:pt-4">
       <KruHeader />
       <div className="container mx-auto max-w-4xl space-y-4 px-4 sm:pl-14 md:px-6">
         <KruSidebar loc="profile" />
-        <div className="mt-2 grid gap-8 rounded-2xl bg-muted/40 px-4 py-6 sm:mt-0">
+        <div className="mt-2 grid gap-8 rounded-2xl border border-white bg-muted/40 px-6 py-6 sm:mt-0">
           <form onSubmit={handleUpdateProfile} className="grid gap-4">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <h2 className="text-2xl font-bold text-pink-700">Profile</h2>
-                <p className="text-violet-500">
+                <h2 className="text-lg font-bold text-pink-700 md:text-2xl">
+                  Profile
+                </h2>
+                <p className="text-sm text-violet-500 md:text-base">
                   Update your personal information.
                 </p>
               </div>
               <Button
                 type="submit"
-                className="bg-gradient-to-r from-cyan-500 via-violet-500 to-pink-500 font-semibold"
+                className="rounded-xl bg-gradient-to-r from-cyan-500 via-violet-500 to-pink-500 font-semibold disabled:opacity-50"
+                disabled={update.isExecuting}
               >
                 Edit Profile
               </Button>
@@ -99,7 +102,7 @@ export default function KruProfile({ params }: { params: { id: string } }) {
                 <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
-                  placeholder='Reini Mangkubumi'
+                  placeholder="Reini Mangkubumi"
                   name="name"
                   value={updateData.name}
                   onChange={(e) => {
@@ -111,7 +114,7 @@ export default function KruProfile({ params }: { params: { id: string } }) {
                 <Label htmlFor="uname">Username</Label>
                 <Input
                   id="uname"
-                  placeholder='reini_mangkubumi'
+                  placeholder="reini_mangkubumi"
                   name="uname"
                   type="text"
                   value={updateData.uname}
@@ -125,14 +128,17 @@ export default function KruProfile({ params }: { params: { id: string } }) {
           <form onSubmit={handleChangePassword} className="grid gap-4">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <h2 className="text-2xl font-bold text-pink-700">
+                <h2 className="text-lg font-bold text-pink-700 md:text-2xl">
                   Change Password
                 </h2>
-                <p className="text-violet-500">Update your account password.</p>
+                <p className="text-sm text-violet-500 md:text-base">
+                  Update your account password.
+                </p>
               </div>
               <Button
                 type="submit"
-                className="bg-gradient-to-r from-cyan-500 via-violet-500 to-pink-500 font-semibold"
+                className="rounded-xl bg-gradient-to-r from-cyan-500 via-violet-500 to-pink-500 font-semibold disabled:opacity-50"
+                disabled={change.isExecuting}
               >
                 Change Password
               </Button>

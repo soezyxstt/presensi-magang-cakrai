@@ -2,26 +2,29 @@
 
 import { actionClient } from "@/lib/action-client";
 import { createSession, deleteSession } from "@/server/auth";
-import { compare } from 'bcrypt-ts';
+import { compare } from "bcrypt-ts";
 import { flattenValidationErrors } from "next-safe-action";
-import { z } from 'zod';
-import { db } from '~/server/db';
+import { z } from "zod";
+import { db } from "~/server/db";
 
 export const signIn = actionClient
-  .schema(z.object({
-    uname: z.string().min(3),
-    password: z.string().min(8),
-  }), {
-    handleValidationErrorsShape: (ve) =>
-      flattenValidationErrors(ve).fieldErrors,
-  })
+  .schema(
+    z.object({
+      uname: z.string().min(3),
+      password: z.string().min(8),
+    }),
+    {
+      handleValidationErrorsShape: (ve) =>
+        flattenValidationErrors(ve).fieldErrors,
+    },
+  )
   .action(async ({ parsedInput: { uname, password } }) => {
     try {
       const user = await db.user.findUnique({
         where: {
           uname,
         },
-      })
+      });
 
       if (!user) {
         throw new Error("User not found");
@@ -33,7 +36,13 @@ export const signIn = actionClient
         throw new Error("Invalid password");
       }
 
-      await createSession(user.id, user.role, user.division,user.uname, user.name!);
+      await createSession(
+        user.id,
+        user.role,
+        user.division,
+        user.uname,
+        user.name!,
+      );
       return {
         message: `Signed in as ${user.name}`,
         status: "success",
@@ -64,5 +73,27 @@ export async function signOut() {
     }
 
     throw new Error("Failed to sign out");
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function getUser(prevState: any, id: string) {
+  try {
+    const user = await db.user.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        attendance: true,
+      },
+    });
+
+    if (!user) {
+      throw new Error("Error");
+    }
+
+    return user;
+  } catch (err) {
+    throw new Error("Error");
   }
 }

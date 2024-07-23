@@ -21,24 +21,27 @@ import type { Attendance, User } from "@prisma/client";
 export default function Kru({
   params,
   cakrais,
+  maxAttend
 }: {
   params: { id: string };
-  cakrais: (User & { attendance: Attendance[] })[];
+    cakrais: (User & { attendance: Attendance[] })[];
+  maxAttend: number;
 }) {
   const data = cakrais.map((cakrai) => {
     return {
       name: cakrai.name ?? cakrai.uname,
       division: cakrai.division,
-      totalAttendance: cakrai.attendance.length,
+      totalAttendance: cakrai.attendance.filter(({ status }) => status !== "ABSENT").length,
       attendance:
         (cakrai.attendance.filter(({ status }) => status !== "ABSENT").length /
-          25) *
+          maxAttend) *
         100,
       updatedAt: cakrai.updatedAt.toLocaleString(),
       id: cakrai.id,
       isAttending: !cakrai.attendance.some(
         (data) => data.date === new Date().toISOString().slice(0, 10),
       ),
+      desc: cakrai.attendance.find((data) => data.date === new Date().toISOString().slice(0, 10))?.status,
     };
   });
   const id = params.id;
@@ -52,12 +55,12 @@ export default function Kru({
   const upperBound = high ? 100 : mod ? 75 : low ? 50 : 0;
   const filteredData = data.filter((cakrai) => {
     if (division === "all" && lowerBound === 0 && upperBound === 100) return true;
-    return (cakrai.division.toLowerCase() === division) && (cakrai.attendance >= lowerBound && cakrai.attendance <= upperBound);
+    return (cakrai.division.toLowerCase() === division || division === "all") && (cakrai.attendance >= lowerBound && cakrai.attendance <= upperBound);
   });
   const lastpage = Math.ceil(filteredData.length / 6);
 
   return (
-    <div className="flex min-h-dvh w-full flex-col">
+    <div className="relative flex min-h-dvh w-full flex-col">
       <KruSidebar loc="home" />
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <KruHeader />

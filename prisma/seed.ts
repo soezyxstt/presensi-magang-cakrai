@@ -165,47 +165,59 @@ const cakruDivision: Division[] = [
 ];
 
 async function main() {
-  for (const user of kru) {
-    const krus = await prisma.user.create({
-      data: {
-        uname: user.uname,
-        passwordHash: await hash(user.passwordHash, 10),
-        division: user.division,
-        role: user.role,
-        name: user.name,
-      },
-    });
+  // for (const user of kru) {
+  //   const krus = await prisma.user.create({
+  //     data: {
+  //       uname: user.uname,
+  //       passwordHash: await hash(user.passwordHash, 10),
+  //       division: user.division,
+  //       role: user.role,
+  //       name: user.name,
+  //     },
+  //   });
 
-    console.log(
-      "name: ",
-      krus.name,
-      "uname: ",
-      krus.uname,
-      "role: ",
-      krus.role,
-    );
-  }
+  //   console.log(
+  //     "name: ",
+  //     krus.name,
+  //     "uname: ",
+  //     krus.uname,
+  //     "role: ",
+  //     krus.role,
+  //   );
+  // }
 
-  for (let i = 0; i < cakruName.length; i++) {
-    const cakrus = await prisma.user.create({
-      data: {
-        uname: cakruUname[i]!,
-        passwordHash: await hash("password", 10),
-        division: cakruDivision[i] ?? "MECHANIC",
-        role: "CAKRU",
-        name: cakruName[i],
-      },
-    });
+  // for (let i = 0; i < cakruName.length; i++) {
+  //   const cakrus = await prisma.user.create({
+  //     data: {
+  //       uname: cakruUname[i]!,
+  //       passwordHash: await hash("password", 10),
+  //       division: cakruDivision[i] ?? "MECHANIC",
+  //       role: "CAKRU",
+  //       name: cakruName[i],
+  //     },
+  //   });
 
-    console.log(
-      "name: ",
-      cakrus.name,
-      "uname: ",
-      cakrus.uname,
-      "role: ",
-      cakrus.role,
-    );
-  }
+  //   console.log(
+  //     "name: ",
+  //     cakrus.name,
+  //     "uname: ",
+  //     cakrus.uname,
+  //     "role: ",
+  //     cakrus.role,
+  //   );
+  // }
+
+  const cakru = await prisma.user.findMany({
+    where: {
+      role: "CAKRU",
+    },
+  });
+
+  cakru.forEach(({uname, name, division}) => {
+    console.log("Nama: ", name);
+    console.log("Username: ", uname);
+    console.log("Divisi: ", division);
+  })
 }
 
 main()

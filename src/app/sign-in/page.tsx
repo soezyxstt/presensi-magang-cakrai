@@ -45,7 +45,7 @@ export default function SignInPage() {
       }
 
       if (data.data?.role === "CAKRU") {
-        router.push("/cakru");
+        router.push("/cakru/" + data.data.id);
       }
     },
     onError: (err) => {
@@ -87,6 +87,7 @@ export default function SignInPage() {
                 <FormLabel className="font-semibold">Username</FormLabel>
                 <FormControl>
                   <Input
+                  className='rounded-xl'
                     type="text"
                     placeholder="Type your shit here brow"
                     {...field}
@@ -107,6 +108,7 @@ export default function SignInPage() {
                 <FormControl>
                   <div className="relative flex items-center">
                     <Input
+                    className='rounded-xl'
                       type={showPassword ? "text" : "password"}
                       placeholder="Type in your secret word"
                       {...field}
@@ -132,7 +134,7 @@ export default function SignInPage() {
           />
           <Button
             type="submit"
-            className="w-full bg-gradient-to-r from-cyan-500 via-violet-500 to-pink-500 font-semibold disabled:opacity-50"
+            className="w-full bg-gradient-to-r rounded-xl from-cyan-500 via-violet-600 to-pink-500 font-semibold disabled:opacity-50 "
             disabled={isExecuting}
           >
             {isExecuting ? "Signing in..." : "Sign In"}

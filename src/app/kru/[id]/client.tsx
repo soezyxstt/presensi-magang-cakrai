@@ -52,7 +52,7 @@ export default function Kru({
   const lastpage = Math.ceil(filteredData.length / 6);
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
+    <div className="flex min-h-dvh w-full flex-col">
       <KruSidebar loc="home" />
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <KruHeader />

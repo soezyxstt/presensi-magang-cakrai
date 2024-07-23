@@ -51,8 +51,10 @@ model Attendance {
     userId    String
     author    User     @relation("kru", fields: [authorId], references: [id])
     authorId  String
-    date      DateTime
+    date      String
     status    Status
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@unique([userId, date])
 }

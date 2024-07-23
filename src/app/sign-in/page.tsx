@@ -36,7 +36,7 @@ export default function SignInPage() {
     },
   });
   const router = useRouter();
-  const { executeAsync } = useAction(signIn, {
+  const { executeAsync, isExecuting } = useAction(signIn, {
     onSuccess: (data) => {
       toast.success(data.data?.message);
       form.reset();
@@ -132,9 +132,10 @@ export default function SignInPage() {
           />
           <Button
             type="submit"
-            className="w-full bg-gradient-to-r from-cyan-500 via-violet-500 to-pink-500 font-semibold"
+            className="w-full bg-gradient-to-r from-cyan-500 via-violet-500 to-pink-500 font-semibold disabled:opacity-50"
+            disabled={isExecuting}
           >
-            SIGN IN
+            {isExecuting ? "Signing in..." : "Sign In"}
           </Button>
           <h6 className="text-center text-xs font-bold">
             To sign up, pls contact admin and hail Garudago!!!

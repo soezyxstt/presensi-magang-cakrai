@@ -36,6 +36,9 @@ export default function Kru({
         100,
       updatedAt: cakrai.updatedAt.toLocaleString(),
       id: cakrai.id,
+      isAttending: !cakrai.attendance.some(
+        (data) => data.date === new Date().toISOString().slice(0, 10),
+      ),
     };
   });
   const id = params.id;
@@ -45,9 +48,11 @@ export default function Kru({
   const [mod, toggleMod, setMod] = useToggle(true);
   const [high, toggleHigh, setHigh] = useToggle(true);
   const [division, setDivision] = useState<string>("all");
+  const lowerBound = low ? 0 : mod ? 50 : high ? 75 : 100;
+  const upperBound = high ? 100 : mod ? 75 : low ? 50 : 0;
   const filteredData = data.filter((cakrai) => {
-    if (division === "all") return true;
-    return cakrai.division.toLowerCase() === division;
+    if (division === "all" && lowerBound === 0 && upperBound === 100) return true;
+    return (cakrai.division.toLowerCase() === division) && (cakrai.attendance >= lowerBound && cakrai.attendance <= upperBound);
   });
   const lastpage = Math.ceil(filteredData.length / 6);
 

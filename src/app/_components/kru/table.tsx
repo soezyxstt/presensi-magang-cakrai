@@ -26,9 +26,9 @@ import { Badge } from "@/components/ui/badge";
 import { MoreHorizontal } from "lucide-react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { type Dispatch, type SetStateAction } from "react";
-import { useAction } from 'next-safe-action/hooks';
-import { attendance } from '~/actions/attendance';
-import { toast } from 'sonner';
+import { useAction } from "next-safe-action/hooks";
+import { attendance } from "~/actions/attendance";
+import { toast } from "sonner";
 
 export default function KruTable({
   data,
@@ -41,15 +41,16 @@ export default function KruTable({
     name: string;
     division: string;
     attendance: number | string;
-    totalAttendance: number | string;
+    totalAttendance: number;
     updatedAt: string;
     id: string;
+    isAttending: boolean;
   }[];
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
   lastpage: number;
   author: string;
-  }) {
+}) {
   const { executeAsync } = useAction(attendance, {
     onSuccess: (data) => {
       console.log(data);
@@ -59,18 +60,25 @@ export default function KruTable({
       console.log(err);
       toast.error(err.error.serverError);
     },
-  })
+    onExecute: () => {
+      toast.loading("Loading...");
+    },
+  });
 
-  async function handleAttend(status: 'PRESENT' | 'ABSENT' | 'LATE', id: string) {
+  async function handleAttend(
+    status: "PRESENT" | "ABSENT" | "LATE",
+    id: string,
+  ) {
     const res = await executeAsync({
       userId: id,
       authorId: author,
       status,
-      date: new Date(),
+      date: new Date().toISOString().slice(0, 10),
     });
 
     console.log(res);
   }
+
   return (
     <Card x-chunk="dashboard-06-chunk-0" className="bg-muted/40">
       <CardHeader>
@@ -132,36 +140,40 @@ export default function KruTable({
                     {cakrai.updatedAt}
                   </TableCell>
                   <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button
-                          aria-haspopup="true"
-                          size="icon"
-                          variant="ghost"
-                        >
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                          onClick={() => handleAttend("PRESENT", cakrai.id)}
-                        >
-                          Present
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => handleAttend("LATE", cakrai.id)}
-                        >
-                          Late
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => handleAttend("PRESENT", cakrai.id)}
-                        >
-                          Absent
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    {cakrai.isAttending ? (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            aria-haspopup="true"
+                            size="icon"
+                            variant="ghost"
+                          >
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Toggle menu</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuItem
+                            onClick={() => handleAttend("PRESENT", cakrai.id)}
+                          >
+                            Present
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleAttend("LATE", cakrai.id)}
+                          >
+                            Late
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => handleAttend("PRESENT", cakrai.id)}
+                          >
+                            Absent
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    ) : (
+                      <h4>Attending</h4>
+                    )}
                   </TableCell>
                 </TableRow>
               );

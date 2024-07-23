@@ -134,7 +134,7 @@ export default function SignInPage() {
             type="submit"
             className="w-full bg-gradient-to-r from-cyan-500 via-violet-500 to-pink-500 font-semibold"
           >
-            SIGN UP
+            SIGN IN
           </Button>
           <h6 className="text-center text-xs font-bold">
             To sign up, pls contact admin and hail Garudago!!!

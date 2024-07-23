@@ -87,10 +87,10 @@ export default function KruTable({
               <TableHead className="hidden text-center text-violet-600 md:table-cell">
                 Division
               </TableHead>
-              <TableHead className="text-center text-violet-600">
+              <TableHead className="hidden text-center text-violet-600 md:table-cell">
                 Attendace
               </TableHead>
-              <TableHead className="hidden text-center text-violet-600 md:table-cell">
+              <TableHead className="text-center text-violet-600">
                 Total Attendance
               </TableHead>
               <TableHead className="hidden text-center text-violet-600 md:table-cell">
@@ -122,10 +122,10 @@ export default function KruTable({
                       {cakrai.division}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-center">
+                  <TableCell className="hidden text-center md:table-cell">
                     {cakrai.attendance + "%"}
                   </TableCell>
-                  <TableCell className="hidden text-center md:table-cell">
+                  <TableCell className="text-center">
                     {cakrai.totalAttendance}
                   </TableCell>
                   <TableCell className="hidden text-center md:table-cell">
@@ -145,9 +145,21 @@ export default function KruTable({
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => handleAttend('PRESENT', cakrai.id)}>Present</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleAttend('LATE', cakrai.id)}>Late</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleAttend('PRESENT', cakrai.id)}>Absent</DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleAttend("PRESENT", cakrai.id)}
+                        >
+                          Present
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleAttend("LATE", cakrai.id)}
+                        >
+                          Late
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleAttend("PRESENT", cakrai.id)}
+                        >
+                          Absent
+                        </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

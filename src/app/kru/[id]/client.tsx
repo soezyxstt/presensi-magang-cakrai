@@ -31,9 +31,13 @@ export default function Kru({
     return {
       name: cakrai.name ?? cakrai.uname,
       division: cakrai.division,
-      totalAttendance: cakrai.attendance.filter(({ status }) => status !== "ABSENT").length,
+      totalAttendance: cakrai.attendance.filter(
+        ({ status }) => status === "PRESENT" || status === "LATE",
+      ).length,
       attendance:
-        (cakrai.attendance.filter(({ status }) => status !== "ABSENT").length /
+        (cakrai.attendance.filter(
+          ({ status }) => status === "PRESENT" || status === "LATE",
+        ).length /
           maxAttend) *
         100,
       updatedAt: cakrai.updatedAt.toLocaleString(),
@@ -41,7 +45,9 @@ export default function Kru({
       isAttending: !cakrai.attendance.some(
         (data) => data.date === new Date().toISOString().slice(0, 10),
       ),
-      desc: cakrai.attendance.find((data) => data.date === new Date().toISOString().slice(0, 10))?.status,
+      desc: cakrai.attendance.find(
+        (data) => data.date === new Date().toISOString().slice(0, 10),
+      )?.status,
     };
   });
   const id = params.id;

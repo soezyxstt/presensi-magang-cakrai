@@ -29,6 +29,7 @@ import { type Dispatch, type SetStateAction } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { attendance } from "~/actions/attendance";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 export default function KruTable({
   data,
@@ -36,21 +37,27 @@ export default function KruTable({
   setPage,
   lastpage,
   author,
+  setActive,
+  ids,
+  div
 }: {
   data: {
     name: string;
     division: string;
-    attendance: number | string;
+    attendance: number;
     totalAttendance: number;
     updatedAt: string;
     id: string;
     isAttending: boolean;
     desc?: "PRESENT" | "ABSENT" | "LATE" | "PERMITS";
   }[];
+  ids: string;
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
+  setActive: Dispatch<SetStateAction<string | null>>;
   lastpage: number;
-  author: string;
+    author: string;
+  div: string;
 }) {
   const { executeAsync } = useAction(attendance, {
     onSuccess: (data) => {
@@ -83,9 +90,12 @@ export default function KruTable({
   return (
     <Card x-chunk="dashboard-06-chunk-0" className="bg-muted/40">
       <CardHeader>
-        <CardTitle>CAKRAI</CardTitle>
+        <CardTitle>
+          <motion.p layoutId={`cakrai-${ids+page+div}`}>CAKRAI</motion.p>
+        </CardTitle>
         <CardDescription className="text-slate-800">
-          Manage your brow and sist and view their performance.
+          <motion.p layoutId={`modal-${ids}`}></motion.p>
+          Manage your brow and sist and view their performance. Click a row to see its details.
         </CardDescription>
       </CardHeader>
       <CardContent className="">
@@ -112,11 +122,15 @@ export default function KruTable({
           </TableHeader>
           <TableBody>
             {data.map((cakrai, index) => {
-              if (index < (page - 1) * 6 || index >= page * 6) return null;
+              if (index < (page - 1) * 9 || index >= page * 9) return null;
 
               return (
-                <TableRow key={index}>
-                  <TableCell className="font-medium">{cakrai.name}</TableCell>
+                <TableRow key={index} onClick={() => setActive(cakrai.name)}>
+                  <TableCell className="font-medium">
+                    <motion.p layoutId={`name-${cakrai.name + ids + div}`} className=' line-clamp-1'>
+                      {cakrai.name}
+                    </motion.p>
+                  </TableCell>
                   <TableCell className="hidden text-center md:table-cell">
                     <Badge
                       variant="outline"
@@ -128,11 +142,13 @@ export default function KruTable({
                             : "border-pink-400"
                       }
                     >
-                      {cakrai.division}
+                      <motion.p layoutId={`division-${cakrai.name + ids + div}`}>
+                        {cakrai.division}
+                      </motion.p>
                     </Badge>
                   </TableCell>
                   <TableCell className="hidden text-center md:table-cell">
-                    {cakrai.attendance + "%"}
+                    {Math.round(cakrai.attendance * 100) / 100 + "%"}
                   </TableCell>
                   <TableCell className="text-center">
                     {cakrai.totalAttendance}
@@ -185,9 +201,12 @@ export default function KruTable({
                         </DropdownMenuContent>
                       </DropdownMenu>
                     ) : (
-                      <h4 className="capitalize">
+                      <motion.h4
+                        layoutId={`status-${cakrai.name + ids + div}`}
+                        className="capitalize"
+                      >
                         {cakrai.desc?.toLowerCase()}
-                      </h4>
+                      </motion.h4>
                     )}
                   </TableCell>
                 </TableRow>
@@ -200,10 +219,10 @@ export default function KruTable({
         <div className="text-xs text-muted-foreground">
           Showing{" "}
           <strong>
-            {(page - 1) * 6 +
+            {(page - 1) * 9 +
               1 +
               " - " +
-              (page === lastpage ? data.length : page * 6)}
+              (page === lastpage ? data.length : page * 9)}
           </strong>{" "}
           of <strong>{data.length}</strong> cakrais
         </div>

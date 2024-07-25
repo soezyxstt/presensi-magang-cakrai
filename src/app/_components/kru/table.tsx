@@ -45,7 +45,7 @@ export default function KruTable({
     updatedAt: string;
     id: string;
     isAttending: boolean;
-    desc?: "PRESENT" | "ABSENT" | "LATE";
+    desc?: "PRESENT" | "ABSENT" | "LATE" | "PERMITS";
   }[];
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
@@ -67,7 +67,7 @@ export default function KruTable({
   });
 
   async function handleAttend(
-    status: "PRESENT" | "ABSENT" | "LATE",
+    status: "PRESENT" | "ABSENT" | "LATE" | "PERMITS",
     id: string,
   ) {
     const res = await executeAsync({
@@ -153,19 +153,31 @@ export default function KruTable({
                             <span className="sr-only">Toggle menu</span>
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent
+                          align="end"
+                          className="bg-violet-400/75"
+                        >
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem
                             onClick={() => handleAttend("PRESENT", cakrai.id)}
+                            className="font-semibold text-white"
                           >
                             Present
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => handleAttend("LATE", cakrai.id)}
+                            className="font-semibold text-white"
                           >
                             Late
                           </DropdownMenuItem>
                           <DropdownMenuItem
+                            className="font-semibold text-white"
+                            onClick={() => handleAttend("PERMITS", cakrai.id)}
+                          >
+                            Permits
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="font-semibold text-white"
                             onClick={() => handleAttend("ABSENT", cakrai.id)}
                           >
                             Absent

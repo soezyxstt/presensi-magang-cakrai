@@ -10,7 +10,7 @@ export const attendance = actionClient.schema(
     userId: z.string(),
     authorId: z.string(),
     date: z.string(),
-    status: z.enum(["PRESENT", "ABSENT", "LATE"]),
+    status: z.enum(["PRESENT", "ABSENT", "LATE", "PERMITS"]),
   }),
 ).action(async ({ parsedInput: { userId, authorId, date, status} }) => {
   try {

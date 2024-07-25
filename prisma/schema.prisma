@@ -29,6 +29,7 @@ enum Status {
     PRESENT
     ABSENT
     LATE
+    PERMITS
 }
 
 model User {

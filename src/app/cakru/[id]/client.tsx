@@ -34,6 +34,8 @@ export default function Cakru({
   const late = user?.attendance.filter((a) => a.status === "LATE").length ?? 0;
   const absent =
     user?.attendance.filter((a) => a.status === "ABSENT").length ?? 0;
+  const permits =
+    user?.attendance.filter((a) => a.status === "PERMITS").length ?? 0;
   const total = maxAttendance;
 
   const router = useRouter();
@@ -136,6 +138,10 @@ export default function Cakru({
                   label: "Late",
                   color: "hsl(var(--chart-2))",
                 },
+                permits: {
+                  label: "Permits",
+                  color: "hsl(var(--chart-4))",
+                },
                 absent: {
                   label: "Absent",
                   color: "hsl(var(--chart-3))",
@@ -162,6 +168,12 @@ export default function Cakru({
                     value: (late / total) * 100,
                     label: `${late / total * 100}%`,
                     fill: "var(--color-late)",
+                  },
+                  {
+                    activity: "permits",
+                    value: (permits / total) * 100,
+                    label: `${permits / total * 100}%`,
+                    fill: "var(--color-permits)",
                   },
                   {
                     activity: "absent",
@@ -211,6 +223,16 @@ export default function Cakru({
                 <div className="text-xs text-gray-800">Late</div>
                 <div className="flex items-baseline gap-1 text-2xl font-bold tabular-nums leading-none text-pink-700">
                   {late}
+                  <span className="text-sm font-normal text-gray-800">
+                    days
+                  </span>
+                </div>
+              </div>
+              <Separator orientation="vertical" className="mx-2 h-10 w-px" />
+              <div className="grid flex-1 auto-rows-min gap-0.5">
+                <div className="text-xs text-gray-800">Permits</div>
+                <div className="flex items-baseline gap-1 text-2xl font-bold tabular-nums leading-none text-pink-700">
+                  {permits}
                   <span className="text-sm font-normal text-gray-800">
                     days
                   </span>

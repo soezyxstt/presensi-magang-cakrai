@@ -207,16 +207,36 @@ async function main() {
   //   );
   // }
 
-  const cakru = await prisma.user.findMany({
+  // const cakru = await prisma.user.findMany({
+  //   where: {
+  //     role: "CAKRU",
+  //   },
+  // });
+
+  // cakru.forEach(({uname, name, division}) => {
+  //   console.log("Nama: ", name);
+  //   console.log("Username: ", uname);
+  //   console.log("Divisi: ", division);
+  // })
+
+  const greg = await prisma.user.findFirst({
     where: {
-      role: "CAKRU",
+      name: "Gregory Salman Ahmad",
     },
   });
 
-  cakru.forEach(({uname, name, division}) => {
-    console.log("Nama: ", name);
-    console.log("Username: ", uname);
-    console.log("Divisi: ", division);
+  console.log(greg);
+
+  await prisma.attendance.update({
+    where: {
+      userId_date: {
+        date: new Date().toISOString().slice(0, 10),
+        userId: greg?.id ?? "",
+      }
+    },
+    data: {
+      status: 'PRESENT'
+    }
   })
 }
 

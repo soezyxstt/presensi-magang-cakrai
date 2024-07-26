@@ -162,7 +162,7 @@ export default function KruTable({
                   <TableCell className="hidden text-center md:table-cell">
                     {cakrai.updatedAt}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className={cakrai.isAttending ? "py-0" : ""}>
                     {cakrai.isAttending ? (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -170,6 +170,7 @@ export default function KruTable({
                             aria-haspopup="true"
                             size="icon"
                             variant="ghost"
+                            className='p-0 h-8'
                           >
                             <MoreHorizontal className="h-4 w-4" />
                             <span className="sr-only">Toggle menu</span>

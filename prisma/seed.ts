@@ -219,23 +219,23 @@ async function main() {
   //   console.log("Divisi: ", division);
   // })
 
-  const greg = await prisma.user.findFirst({
+  const selected = await prisma.user.findFirst({
     where: {
-      name: "Gregory Salman Ahmad",
+      name: "Reyhan Nugraha Akbar",
     },
   });
 
-  console.log(greg);
+  console.log(selected);
 
   await prisma.attendance.update({
     where: {
       userId_date: {
         date: new Date().toISOString().slice(0, 10),
-        userId: greg?.id ?? "",
+        userId: selected?.id ?? "",
       }
     },
     data: {
-      status: 'PRESENT'
+      status: 'PERMITS'
     }
   })
 }

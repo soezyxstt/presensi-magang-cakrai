@@ -39,7 +39,7 @@ export default function KruTable({
   author,
   setActive,
   ids,
-  div
+  div,
 }: {
   data: {
     name: string;
@@ -56,7 +56,7 @@ export default function KruTable({
   setPage: Dispatch<SetStateAction<number>>;
   setActive: Dispatch<SetStateAction<string | null>>;
   lastpage: number;
-    author: string;
+  author: string;
   div: string;
 }) {
   const { executeAsync } = useAction(attendance, {
@@ -91,11 +91,12 @@ export default function KruTable({
     <Card x-chunk="dashboard-06-chunk-0" className="bg-muted/40">
       <CardHeader>
         <CardTitle>
-          <motion.p layoutId={`cakrai-${ids+page+div}`}>CAKRAI</motion.p>
+          <motion.p layoutId={`cakrai-${ids + page + div}`}>CAKRAI</motion.p>
         </CardTitle>
         <CardDescription className="text-slate-800">
           <motion.p layoutId={`modal-${ids}`}></motion.p>
-          Manage your brow and sist and view their performance. Click a row to see its details.
+          Manage your brow and sist and view their performance. Click a row to
+          see its details.
         </CardDescription>
       </CardHeader>
       <CardContent className="">
@@ -127,7 +128,10 @@ export default function KruTable({
               return (
                 <TableRow key={index} onClick={() => setActive(cakrai.name)}>
                   <TableCell className="font-medium">
-                    <motion.p layoutId={`name-${cakrai.name + ids + div}`} className=' line-clamp-1'>
+                    <motion.p
+                      layoutId={`name-${cakrai.name + ids + div}`}
+                      className="line-clamp-1"
+                    >
                       {cakrai.name}
                     </motion.p>
                   </TableCell>
@@ -142,7 +146,9 @@ export default function KruTable({
                             : "border-pink-400"
                       }
                     >
-                      <motion.p layoutId={`division-${cakrai.name + ids + div}`}>
+                      <motion.p
+                        layoutId={`division-${cakrai.name + ids + div}`}
+                      >
                         {cakrai.division}
                       </motion.p>
                     </Badge>
@@ -175,26 +181,38 @@ export default function KruTable({
                         >
                           <DropdownMenuLabel>Actions</DropdownMenuLabel>
                           <DropdownMenuItem
-                            onClick={() => handleAttend("PRESENT", cakrai.id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void handleAttend("PRESENT", cakrai.id);
+                            }}
                             className="font-semibold text-white"
                           >
                             Present
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => handleAttend("LATE", cakrai.id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void handleAttend("LATE", cakrai.id);
+                            }}
                             className="font-semibold text-white"
                           >
                             Late
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             className="font-semibold text-white"
-                            onClick={() => handleAttend("PERMITS", cakrai.id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void handleAttend("PERMITS", cakrai.id);
+                            }}
                           >
                             Permits
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             className="font-semibold text-white"
-                            onClick={() => handleAttend("ABSENT", cakrai.id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void handleAttend("ABSENT", cakrai.id);
+                            }}
                           >
                             Absent
                           </DropdownMenuItem>

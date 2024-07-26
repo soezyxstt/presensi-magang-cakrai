@@ -18,7 +18,7 @@ import type { Attendance, User } from "@prisma/client";
 import { TextGenerateEffect } from "~/components/aceternity/text-generate-effect";
 import { LogOut, PartyPopper, Plane, Stamp, Star } from "lucide-react";
 import { FlipWords } from "~/components/aceternity/flip-words";
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function Cakru({
   params,
@@ -74,9 +74,9 @@ export default function Cakru({
     setChangeData({ oldPassword: "", password: "", confirmPassword: "" });
   }
   return (
-    <div className="relative min-h-dvh w-full flex flex-col gap-6 px-6 md:py-6 py-4 md:px-12">
-      <Link href="/sign-out" className='absolute top-6 right-6'>
-        <LogOut className="w-4 h-4 md:w-6 md:h-6 text-violet-100" />
+    <div className="relative flex min-h-dvh w-full flex-col gap-6 px-6 py-4 md:px-12 md:py-6">
+      <Link href="/sign-out" className="absolute right-6 top-6">
+        <LogOut className="h-4 w-4 text-violet-100 md:h-6 md:w-6" />
       </Link>
       <div className="">
         <TextGenerateEffect words="Dashboard" className="md:text-3xl" />
@@ -85,7 +85,7 @@ export default function Cakru({
           <FlipWords
             words={["best", "future", "prime", "supreme"]}
             duration={2000}
-            className='text-violet-700'
+            className="text-violet-700"
           />
           of KRAI.
         </div>
@@ -160,25 +160,25 @@ export default function Cakru({
                   {
                     activity: "present",
                     value: (present / total) * 100,
-                    label: `${present / total * 100}%`,
+                    label: `${Math.round((present / total) * 100 * 100) / 100}%`,
                     fill: "var(--color-present)",
                   },
                   {
                     activity: "late",
                     value: (late / total) * 100,
-                    label: `${late / total * 100}%`,
+                    label: `${Math.round((late / total) * 10000) / 100}%`,
                     fill: "var(--color-late)",
                   },
                   {
                     activity: "permits",
                     value: (permits / total) * 100,
-                    label: `${permits / total * 100}%`,
+                    label: `${Math.round((permits / total) * 10000) / 100}%`,
                     fill: "var(--color-permits)",
                   },
                   {
                     activity: "absent",
                     value: (absent / total) * 100,
-                    label: `${absent / total * 100}%`,
+                    label: `${Math.round((absent / total) * 10000) / 100}%`,
                     fill: "var(--color-absent)",
                   },
                 ]}
@@ -266,7 +266,7 @@ export default function Cakru({
             </div>
             <Button
               type="submit"
-              className="bg-gradient-to-r from-cyan-500 via-violet-500 to-pink-500 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+              className="rounded-2xl bg-gradient-to-r from-cyan-500 via-violet-500 to-pink-500 font-semibold disabled:cursor-not-allowed disabled:opacity-50"
               disabled={change.isExecuting}
             >
               Change Password

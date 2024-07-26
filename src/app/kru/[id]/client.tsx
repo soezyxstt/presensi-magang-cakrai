@@ -202,25 +202,25 @@ export default function Kru({
                             {
                               activity: "present",
                               value: (present / total) * 100,
-                              label: `${Math.round((present / total) * 100 * 100)}%`,
+                              label: `${Math.round((present / total) * 100 * 100)/100}%`,
                               fill: "var(--color-present)",
                             },
                             {
                               activity: "late",
                               value: (late / total) * 100,
-                              label: `${Math.round((late / total) * 10000)}%`,
+                              label: `${Math.round((late / total) * 10000)/100}%`,
                               fill: "var(--color-late)",
                             },
                             {
                               activity: "permits",
                               value: (permits / total) * 100,
-                              label: `${Math.round((permits / total) * 10000)}%`,
+                              label: `${Math.round((permits / total) * 10000)/100}%`,
                               fill: "var(--color-permits)",
                             },
                             {
                               activity: "absent",
                               value: (absent / total) * 100,
-                              label: `${Math.round((absent / total) * 10000)}%`,
+                              label: `${Math.round((absent / total) * 10000)/100}%`,
                               fill: "var(--color-absent)",
                             },
                           ]}

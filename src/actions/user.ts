@@ -75,25 +75,3 @@ export async function signOut() {
     throw new Error("Failed to sign out");
   }
 }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getUser(prevState: any, id: string) {
-  try {
-    const user = await db.user.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        attendance: true,
-      },
-    });
-
-    if (!user) {
-      throw new Error("Error");
-    }
-
-    return user;
-  } catch (err) {
-    throw new Error("Error");
-  }
-}

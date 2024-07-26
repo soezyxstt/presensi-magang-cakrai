@@ -1,25 +1,7 @@
-import { db } from "~/server/db";
 import Kru from "./client";
 import { verifySession } from "~/server/auth";
 import { redirect } from "next/navigation";
-
-async function getCAKRAI() {
-  "use server";
-
-  const cakrais = await db.user.findMany({
-    where: {
-      role: "CAKRU",
-    },
-    include: {
-      attendance: true,
-    },
-    orderBy: {
-      name: "asc",
-    },
-  });
-
-  return cakrais;
-}
+import { getCakrais } from '~/lib/dal';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await verifySession();
@@ -31,7 +13,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     redirect("/kru/" + session.userId);
   }
 
-  const cakrai = await getCAKRAI();
+  const cakrai = await getCakrais();
   const cakrais = cakrai.map((cakrai) => {
     return {
       ...cakrai,

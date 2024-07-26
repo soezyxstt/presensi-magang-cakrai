@@ -1,47 +1,7 @@
-import { db } from "~/server/db";
 import Cakru from "./client";
 import { verifySession } from "~/server/auth";
 import { redirect } from "next/navigation";
-
-async function getUser(id: string) {
-  "use server";
-
-  const user = await db.user.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      attendance: true,
-    },
-  });
-
-  return user;
-}
-
-async function getMaxAttendance() {
-  "use server";
-
-  const users = await db.user.findMany({
-    where: {
-      role: "CAKRU",
-    },
-    include: {
-      attendance: true,
-    },
-  });
-
-  let maxAttendance = 0;
-  users.forEach((user) => {
-    const attendance = user.attendance.filter(
-      (a) => a.status !== "ABSENT",
-    ).length;
-    if (attendance > maxAttendance) {
-      maxAttendance = attendance;
-    }
-  });
-
-  return maxAttendance;
-}
+import { getMaxAttendance, getUser } from '~/lib/dal';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await verifySession();

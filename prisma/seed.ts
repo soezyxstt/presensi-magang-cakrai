@@ -221,7 +221,7 @@ async function main() {
 
   const selected = await prisma.user.findFirst({
     where: {
-      name: "Reyhan Nugraha Akbar",
+      name: "Crissano Ariel Saputra",
     },
   });
 
@@ -235,7 +235,7 @@ async function main() {
       }
     },
     data: {
-      status: 'PERMITS'
+      status: 'PRESENT'
     }
   })
 }

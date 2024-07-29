@@ -1,7 +1,7 @@
 import Kru from "./client";
 import { verifySession } from "~/server/auth";
 import { redirect } from "next/navigation";
-import { getCakrais } from '~/lib/dal';
+import { getCakrais, getMaxAttendance } from '~/lib/dal';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await verifySession();
@@ -22,9 +22,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       ),
     };
   });
-  const cakraiAttend = cakrais.map((cakrai) => {
-    return cakrai.attendance.filter(({ status }) => status !== "ABSENT").length;
-  });
-  const maxAttend = cakraiAttend.reduce((a, b) => Math.max(a, b));
+
+  const maxAttend = await getMaxAttendance();
   return <Kru params={params} cakrais={cakrais} maxAttend={maxAttend}></Kru>;
 }
